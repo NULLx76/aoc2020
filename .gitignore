@@ -25,3 +25,7 @@ aoc202-*.tar
 
 # Temporary files for e.g. tests
 /tmp
+
+# Jetbrains
+.idea/
+*.iml
