@@ -1,14 +1,13 @@
-
 defmodule DayOneTest do
   use ExUnit.Case
 
   import DayOne
 
   test "part1" do
-    assert part1() == 1009899
+    assert part1() == 1_009_899
   end
 
-  test "part2" do 
-    assert part2() == 44211152
+  test "part2" do
+    assert part2() == 44_211_152
   end
 end
