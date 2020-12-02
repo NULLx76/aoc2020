@@ -17,7 +17,7 @@ defmodule DayTwo do
     at_pos1 = String.at(password, String.to_integer(pos1) - 1) == char
     at_pos2 = String.at(password, String.to_integer(pos2) - 1) == char
 
-    (at_pos1 && !at_pos2) || (!at_pos1 && at_pos2)
+    at_pos1 != at_pos2
   end
 
   def part1 do
