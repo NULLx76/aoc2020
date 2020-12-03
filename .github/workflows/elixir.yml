@@ -25,3 +25,5 @@ jobs:
       run: mix deps.get
     - name: Run tests
       run: mix test
+    - name: Static Analysis
+      run: mix credo

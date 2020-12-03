@@ -1,4 +1,6 @@
 defmodule DayTwo do
+  @moduledoc "Day Two of the AoC"
+
   def parse(file) do
     File.read!(file)
     |> String.split("\n", trim: true)
@@ -12,17 +14,17 @@ defmodule DayTwo do
     count >= String.to_integer(min) && count <= String.to_integer(max)
   end
 
+  def part1 do
+    parse("./inputs/day2.txt")
+    |> Enum.count(&is_valid?/1)
+  end
+
   def is_valid2?(line) do
     [pos1, pos2, char, password] = String.split(line, ["-", " ", ":"], trim: true)
     at_pos1? = String.at(password, String.to_integer(pos1) - 1) == char
     at_pos2? = String.at(password, String.to_integer(pos2) - 1) == char
 
     at_pos1? != at_pos2?
-  end
-
-  def part1 do
-    parse("./inputs/day2.txt")
-    |> Enum.count(&is_valid?/1)
   end
 
   def part2 do
