@@ -1,7 +1,7 @@
-defmodule DayOneTest do
+defmodule Day01Test do
   use ExUnit.Case, async: true
 
-  import DayOne
+  import Day01
 
   test "part1" do
     assert part1() == 1_009_899

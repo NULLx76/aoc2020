@@ -1,4 +1,4 @@
-defmodule DayTwo do
+defmodule Day02 do
   @moduledoc "Day Two of the AoC"
 
   def parse(file) do

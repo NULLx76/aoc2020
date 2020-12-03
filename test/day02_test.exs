@@ -1,7 +1,7 @@
-defmodule DayTwoTest do
+defmodule Day02Test do
   use ExUnit.Case, async: true
 
-  import DayTwo
+  import Day02
 
   test "is_valid" do
     assert is_valid?("1-3 a: abcde")
