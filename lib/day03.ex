@@ -6,8 +6,8 @@ defmodule Day03 do
     |> String.split("\n", trim: true)
   end
 
-  defp slope(input, {dx, dy}) do 
-    slope(input, {dx,dy,0,0}, 0)
+  defp slope(input, {dx, dy}) do
+    slope(input, {dx, dy, 0, 0}, 0)
   end
 
   defp slope(input, {dx, dy, x, y}, count) do

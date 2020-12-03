@@ -7,6 +7,7 @@ steps:
 - name: Elixir Build and Test
   image: harbor.xirion.net/hub/library/elixir
   commands:
+    - mix local.hex --force
     - mix deps.get
     - mix test
     - mix credo
