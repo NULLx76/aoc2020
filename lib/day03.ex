@@ -1,9 +1,13 @@
 defmodule Day03 do
   @moduledoc "Day Three of the AoC"
 
-  def parse(file) do
+  defp parse(file) do
     File.read!(file)
     |> String.split("\n", trim: true)
+  end
+
+  defp slope(input, {dx, dy}) do 
+    slope(input, {dx,dy,0,0}, 0)
   end
 
   defp slope(input, {dx, dy, x, y}, count) do
@@ -22,14 +26,14 @@ defmodule Day03 do
 
   def part1 do
     parse("./inputs/day3.txt")
-    |> slope({3, 1, 0, 0}, 0)
+    |> slope({3, 1})
   end
 
   def part2 do
     input = parse("./inputs/day3.txt")
 
-    [{1, 1, 0, 0}, {3, 1, 0, 0}, {5, 1, 0, 0}, {7, 1, 0, 0}, {1, 2, 0, 0}]
-    |> Enum.map(&slope(input, &1, 0))
+    [{1, 1}, {3, 1}, {5, 1}, {7, 1}, {1, 2}]
+    |> Enum.map(&slope(input, &1))
     |> Enum.reduce(&(&1 * &2))
   end
 end

@@ -1,7 +1,7 @@
 defmodule Day02 do
   @moduledoc "Day Two of the AoC"
 
-  def parse(file) do
+  defp parse(file) do
     File.read!(file)
     |> String.split("\n", trim: true)
   end
