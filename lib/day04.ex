@@ -1,5 +1,37 @@
+defmodule Day04.Validator do
+  @moduledoc "Day04 Validate function extracted into a module"
+
+  @spec has_valid_keys?(Map) :: boolean
+  def has_valid_keys?(passport) do
+    # cid ommited
+    ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
+    |> Enum.all?(&Map.has_key?(passport, &1))
+  end
+
+  @spec validate({String, String}) :: boolean
+  def validate({"hgt", v}) do
+    case String.split_at(v, -2) do
+      {h, "cm"} -> String.to_integer(h) in 150..193
+      {h, "in"} -> String.to_integer(h) in 59..76
+      _ -> false
+    end
+  end
+
+  def validate({"ecl", v}),
+    do: ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"] |> Enum.member?(v)
+
+  def validate({"hcl", v}), do: Regex.match?(~r/^#[0-9a-f]{6}$/, v)
+  def validate({"byr", v}), do: String.to_integer(v) in 1920..2002
+  def validate({"iyr", v}), do: String.to_integer(v) in 2010..2020
+  def validate({"eyr", v}), do: String.to_integer(v) in 2020..2030
+  def validate({"pid", v}), do: String.length(v) == 9
+  def validate({"cid", _}), do: true
+  def validate({_, _}), do: false
+end
+
 defmodule Day04 do
   @moduledoc "Day Four of the AoC"
+  import Day04.Validator
 
   @spec parse_passport([binary]) :: Map
   def parse_passport(passport) do
@@ -16,75 +48,14 @@ defmodule Day04 do
     |> Enum.map(&parse_passport/1)
   end
 
-  @spec is_valid?(Map) :: boolean
-  def is_valid?(passport) do
-    # cid ommited
-    ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
-    |> Enum.all?(&Map.has_key?(passport, &1))
-  end
-
-  defp in_bounds?(str, low, high) do
-    String.to_integer(str) >= low and String.to_integer(str) <= high
-  end
-
-  defp is_valid_hgt(v) do
-    val = String.slice(v, 0..-3)
-    suffix = String.slice(v, -2..-1)
-
-    case suffix do
-      "cm" -> in_bounds?(val, 150, 193)
-      "in" -> in_bounds?(val, 59, 76)
-      _ -> false
-    end
-  end
-
-  def is_valid2?(passport) do
-    Enum.all?(passport, fn x ->
-      case x do
-        {"ecl", v} ->
-          ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
-          |> Enum.member?(v)
-
-        {"hgt", v} ->
-          is_valid_hgt(v)
-
-        {"hcl", v} ->
-          Regex.match?(~r/^#[0-9a-f]{6}$/, v)
-
-        {"byr", v} ->
-          in_bounds?(v, 1920, 2002)
-
-        {"iyr", v} ->
-          in_bounds?(v, 2010, 2020)
-
-        {"eyr", v} ->
-          in_bounds?(v, 2020, 2030)
-
-        {"pid", v} ->
-          String.length(v) == 9
-
-        _ ->
-          true
-      end
-    end)
-  end
-
-  def part1 do
-    part1("./inputs/day4.txt")
-  end
-
-  def part1(file) do
+  def part1(file \\ "./inputs/day4.txt") do
     parse(file)
-    |> Enum.count(&is_valid?/1)
+    |> Enum.count(&has_valid_keys?/1)
   end
 
-  def part2 do
-    part2("./inputs/day4.txt")
-  end
-
-  def part2(file) do
+  def part2(file \\ "./inputs/day4.txt") do
     parse(file)
-    |> Enum.filter(&is_valid?/1)
-    |> Enum.count(&is_valid2?/1)
+    |> Enum.filter(&has_valid_keys?/1)
+    |> Enum.count(&Enum.all?(&1, fn x -> validate(x) end))
   end
 end
