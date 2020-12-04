@@ -8,8 +8,8 @@ defmodule Day04.Validator do
     |> Enum.all?(&Map.has_key?(passport, &1))
   end
 
-  @spec validate({String, String}) :: boolean
-  def validate({"hgt", v}) do
+  @spec valid?({binary, binary}) :: boolean
+  def valid?({"hgt", v}) do
     case String.split_at(v, -2) do
       {h, "cm"} -> String.to_integer(h) in 150..193
       {h, "in"} -> String.to_integer(h) in 59..76
@@ -17,16 +17,14 @@ defmodule Day04.Validator do
     end
   end
 
-  def validate({"ecl", v}),
-    do: ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"] |> Enum.member?(v)
-
-  def validate({"hcl", v}), do: Regex.match?(~r/^#[0-9a-f]{6}$/, v)
-  def validate({"byr", v}), do: String.to_integer(v) in 1920..2002
-  def validate({"iyr", v}), do: String.to_integer(v) in 2010..2020
-  def validate({"eyr", v}), do: String.to_integer(v) in 2020..2030
-  def validate({"pid", v}), do: String.length(v) == 9
-  def validate({"cid", _}), do: true
-  def validate({_, _}), do: false
+  def valid?({"ecl", v}), do: v in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
+  def valid?({"hcl", v}), do: Regex.match?(~r/^#[0-9a-f]{6}$/, v)
+  def valid?({"byr", v}), do: String.to_integer(v) in 1920..2002
+  def valid?({"iyr", v}), do: String.to_integer(v) in 2010..2020
+  def valid?({"eyr", v}), do: String.to_integer(v) in 2020..2030
+  def valid?({"pid", v}), do: String.length(v) == 9
+  def valid?({"cid", _}), do: true
+  def valid?({_, _}), do: false
 end
 
 defmodule Day04 do
@@ -56,6 +54,6 @@ defmodule Day04 do
   def part2(file \\ "./inputs/day4.txt") do
     parse(file)
     |> Enum.filter(&has_valid_keys?/1)
-    |> Enum.count(&Enum.all?(&1, fn x -> validate(x) end))
+    |> Enum.count(&Enum.all?(&1, fn x -> valid?(x) end))
   end
 end

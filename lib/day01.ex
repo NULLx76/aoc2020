@@ -7,6 +7,7 @@ defmodule Day01 do
     |> Enum.map(&String.to_integer/1)
   end
 
+  @spec part1(binary) :: non_neg_integer
   def part1(file \\ "./inputs/day1.txt") do
     input = parse(file)
     adds_to_2020? = &(&1 + &2 == 2020)
@@ -14,6 +15,7 @@ defmodule Day01 do
     hd(res)
   end
 
+  @spec part2(binary) :: non_neg_integer
   def part2(file \\ "./inputs/day1.txt") do
     input = parse(file)
     adds_to_2020? = fn a, b, c -> a + b + c == 2020 end
