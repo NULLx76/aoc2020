@@ -17,8 +17,9 @@ defmodule Day04.Validator do
     end
   end
 
+  @hcl_re ~r/^#[0-9a-f]{6}$/
+  def valid?({"hcl", v}), do: Regex.match?(@hcl_re, v)
   def valid?({"ecl", v}), do: v in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
-  def valid?({"hcl", v}), do: Regex.match?(~r/^#[0-9a-f]{6}$/, v)
   def valid?({"byr", v}), do: String.to_integer(v) in 1920..2002
   def valid?({"iyr", v}), do: String.to_integer(v) in 2010..2020
   def valid?({"eyr", v}), do: String.to_integer(v) in 2020..2030
