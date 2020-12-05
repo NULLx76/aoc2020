@@ -1,7 +1,9 @@
 defmodule Day05 do
   @moduledoc "Day Five of the AoC"
+  @rowrange 0..127
+  @colrange 0..7
 
-  def slice_range(range, bound) do
+  defp slice_range(range, bound) do
     half = div(Enum.count(range), 2)
 
     case bound do
@@ -24,22 +26,19 @@ defmodule Day05 do
 
   def seat_id({row, col}), do: row * 8 + col
 
-  def parse(file) do
-    File.read!(file)
-    |> String.split("\n", trim: true)
-  end
-
   def part1(file \\ "./inputs/day5.txt") do
-    parse(file)
-    |> Enum.map(&decode(&1, 0..127, 0..7))
-    |> Enum.map(&seat_id/1)
+    File.stream!(file)
+    |> Stream.map(&String.trim/1)
+    |> Stream.map(&decode(&1, @rowrange, @colrange))
+    |> Stream.map(&seat_id/1)
     |> Enum.max()
   end
 
   def part2(file \\ "./inputs/day5.txt") do
     [a | _] =
-      parse(file)
-      |> Enum.map(&decode(&1, 0..127, 0..7))
+      File.read!(file)
+      |> String.split("\n", trim: true)
+      |> Enum.map(&decode(&1, @rowrange, @colrange))
       |> Enum.map(&seat_id/1)
       |> Enum.sort()
       |> Enum.chunk_every(2, 1, :discard)

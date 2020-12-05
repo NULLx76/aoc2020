@@ -1,12 +1,14 @@
 defmodule Day05Test do
   use ExUnit.Case, async: true
-
   import Day05
 
+  @rowrange 0..127
+  @colrange 0..7
+
   test "decode" do
-    assert decode("BFFFBBFRRR", 0..127, 0..7) == {70, 7}
-    assert decode("FFFBBBFRRR", 0..127, 0..7) == {14, 7}
-    assert decode("BBFFBBFRLL", 0..127, 0..7) == {102, 4}
+    assert decode("BFFFBBFRRR", @rowrange, @colrange) == {70, 7}
+    assert decode("FFFBBBFRRR", @rowrange, @colrange) == {14, 7}
+    assert decode("BBFFBBFRLL", @rowrange, @colrange) == {102, 4}
   end
 
   test "seat id" do
