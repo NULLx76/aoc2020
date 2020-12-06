@@ -3,4 +3,4 @@
 
 I'm Learning Elixir with this AoC, so don't expect top-notch code quality.
 
-You can run `mix test` to run all the days, you can find the code for each day in `lib/day$n.ex` and the tests for that day in `lib/day$n_test.exs`.
+You can run `mix aoc` to run all the days and `mix aoc $n` to run a specific day. The code for each day is available in `lib/day$n.ex` and the tests for that day in `lib/day$n_test.exs` which can be executed with `mix test`.
