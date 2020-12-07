@@ -33,7 +33,7 @@ defmodule Mix.Tasks.Aoc do
   def run(args) do
     if length(args) == 1 do
       case Integer.parse(hd(args)) do
-        {day, _rem} ->
+        {day, _} ->
           if run_day(day) != :ok do
             Mix.shell().error("Invalid day: \"#{day}\"")
           end
