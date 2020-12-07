@@ -1,9 +1,10 @@
 defmodule Mix.Tasks.Aoc do
-  @moduledoc "This tasks runs all days in outputs them to stdout"
-  @shortdoc "print all aoc days"
+  @shortdoc "print aoc days"
+  @moduledoc "This tasks run all or specific days and prints them"
 
   use Mix.Task
 
+  @spec pad_zero(Integer.t()) :: String.t()
   defp pad_zero(day) do
     if day < 10 do
       "0" <> Integer.to_string(day)
@@ -32,7 +33,7 @@ defmodule Mix.Tasks.Aoc do
   def run(args) do
     if length(args) == 1 do
       case Integer.parse(hd(args)) do
-        {day, _} ->
+        {day, _rem} ->
           if run_day(day) != :ok do
             Mix.shell().error("Invalid day: \"#{day}\"")
           end

@@ -153,7 +153,7 @@
         # Controversial and experimental checks (opt-in, just replace `false` with `[]`)
         #
         {Credo.Check.Consistency.MultiAliasImportRequireUse, []},
-        {Credo.Check.Consistency.UnusedVariableNames, []},
+        {Credo.Check.Consistency.UnusedVariableNames, false},
         {Credo.Check.Design.DuplicatedCode, []},
         {Credo.Check.Readability.AliasAs, []},
         {Credo.Check.Readability.BlockPipe, []},
