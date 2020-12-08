@@ -1,78 +1,78 @@
-defmodule Day08.State do
-  @moduledoc "Internal state for Day08's interpreter"
-  defstruct code: [:nop, 0], pc: 0, acc: 0, vis: []
-end
-
-defmodule Day08 do
-  @moduledoc "Day Eight of the AoC"
-  alias Day08.State
+defmodule Day08.Bootloader do
+  @moduledoc "Day eight Bootloader"
 
   @type instruction :: {:nop | :acc | :jmp, integer()}
+  @type code :: [instruction()]
 
-  @spec parse_instr(binary) :: instruction()
-  def parse_instr(line) do
-    [instr, data] = String.split(line)
+  defp parse_instr([instr, data]) do
     {String.to_existing_atom(instr), String.to_integer(data)}
   end
 
-  @spec parse(binary) :: [instruction()]
+  @spec parse(binary) :: code()
   def parse(file) do
-    File.read!(file)
-    |> String.split("\n", trim: true)
-    |> Enum.map(&parse_instr/1)
+    File.stream!(file)
+    |> Stream.map(&String.split/1)
+    |> Stream.map(&parse_instr/1)
+    |> Enum.into([])
   end
 
-  @spec run_instr(%State{}, instruction()) :: %State{} | {integer(), :exit}
-  def run_instr(%{acc: a, pc: pc, vis: v} = s, {:acc, n}),
-    do: %{s | pc: pc + 1, vis: [pc | v], acc: a + n}
+  defmodule State do
+    @moduledoc "Internal state for Day08's interpreter"
+    defstruct code: nil, pc: 0, acc: 0, vis: []
+  end
 
-  def run_instr(%{pc: pc, vis: v} = s, {:nop, _}), do: %{s | pc: pc + 1, vis: [pc | v]}
-  def run_instr(%{pc: pc, vis: v} = s, {:jmp, n}), do: %{s | pc: pc + n, vis: [pc | v]}
-  def run_instr(%{acc: a}, _), do: {a, :exit}
+  @spec exec(%State{}, nil | instruction()) :: {integer(), :exit} | %State{}
+  def exec(s, nil), do: {s.acc, :exit}
+  def exec(s, {:nop, _}), do: %State{s | pc: s.pc + 1, vis: [s.pc | s.vis]}
+  def exec(s, {:jmp, n}), do: %State{s | pc: s.pc + n, vis: [s.pc | s.vis]}
+  def exec(s, {:acc, n}), do: %State{s | pc: s.pc + 1, vis: [s.pc | s.vis], acc: s.acc + n}
 
-  @spec execute(%State{}) :: {integer(), :exit | :loop}
-  def execute(%{acc: a, code: c, pc: l, vis: v} = s) do
-    if l in v do
-      {a, :loop}
+  @spec run(code() | %State{}) :: {integer(), :exit | :loop}
+  def run(code) when is_list(code), do: run(%State{code: code})
+
+  def run(s) do
+    if s.pc in s.vis do
+      {s.acc, :loop}
     else
-      case run_instr(s, Enum.at(c, l)) do
+      case exec(s, Enum.at(s.code, s.pc)) do
         {a, :exit} -> {a, :exit}
-        x -> execute(x)
+        x -> run(x)
       end
     end
   end
 
-  def part1(file \\ "./inputs/day8.txt") do
-    code = parse(file)
-    state = %State{code: code}
-    {a, _} = execute(state)
-    a
+  @spec mutate(code(), number()) :: code()
+  defp mutate(code, line) do
+    case Enum.at(code, line) do
+      {:jmp, n} -> List.replace_at(code, line, {:nop, n})
+      {:nop, n} -> List.replace_at(code, line, {:jmp, n})
+      _ -> code
+    end
   end
 
-  defp run_mut(mutated, code, line) do
-    case execute(%State{code: mutated}) do
-      {_, :loop} -> mutate(code, line + 1)
+  @spec run_mutate(code(), integer()) :: integer()
+  def run_mutate(code, line \\ 0) do
+    case run(mutate(code, line)) do
+      {_, :loop} -> run_mutate(code, line + 1)
       {a, :exit} -> a
     end
   end
+end
 
-  def mutate(code, line) do
-    case Enum.at(code, line) do
-      {:jmp, n} ->
-        List.replace_at(code, line, {:nop, n})
-        |> run_mut(code, line)
+defmodule Day08 do
+  @moduledoc "Day Eight of the AoC"
+  alias Day08.Bootloader
 
-      {:nop, n} ->
-        List.replace_at(code, line, {:jmp, n})
-        |> run_mut(code, line)
-
-      _ ->
-        mutate(code, line + 1)
-    end
+  @spec part1(binary) :: integer
+  def part1(file \\ "./inputs/day8.txt") do
+    code = Bootloader.parse(file)
+    {acc, :loop} = Bootloader.run(code)
+    acc
   end
 
+  @spec part2(binary) :: integer
   def part2(file \\ "./inputs/day8.txt") do
-    code = parse(file)
-    mutate(code, 0)
+    code = Bootloader.parse(file)
+    Bootloader.run_mutate(code)
   end
 end

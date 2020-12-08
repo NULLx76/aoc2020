@@ -14,9 +14,9 @@ defmodule Day07 do
   end
 
   defp parse_line(line) do
-    [bag | [contains]] = String.split(line, " contain ")
+    [bag | [contains]] = String.split(line, " bags contain ")
     contained = String.split(contains, ", ") |> Enum.map(&parse_contained_bag/1)
-    {strip_bag(bag), contained}
+    {bag, contained}
   end
 
   defp parse(file), do: File.stream!(file) |> Enum.into(%{}, &parse_line/1)
@@ -25,14 +25,14 @@ defmodule Day07 do
   defp can_contain?(_, {bag, _}, find) when bag == find, do: true
 
   defp can_contain?(map, {bag, _}, find) do
-    Map.get(map, bag, none: 0)
+    Map.fetch!(map, bag)
     |> Enum.any?(&can_contain?(map, &1, find))
   end
 
   defp count_nested(_, :none), do: 0
 
   defp count_nested(map, bag) do
-    Map.get(map, bag, none: 0)
+    Map.fetch!(map, bag)
     |> Enum.reduce(1, fn {bag, n}, acc -> count_nested(map, bag) * n + acc end)
   end
 

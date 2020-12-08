@@ -26,4 +26,6 @@ jobs:
     - name: Run tests
       run: mix test
     - name: Static Analysis
-      run: mix credo
+      run: |
+        mix credo
+        mix dialyzer

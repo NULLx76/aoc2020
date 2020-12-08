@@ -4,7 +4,7 @@ defmodule Mix.Tasks.Aoc do
 
   use Mix.Task
 
-  @spec pad_zero(Integer.t()) :: String.t()
+  @spec pad_zero(integer()) :: binary()
   defp pad_zero(day) do
     if day < 10 do
       "0" <> Integer.to_string(day)
