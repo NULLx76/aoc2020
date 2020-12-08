@@ -7,20 +7,22 @@ defmodule Day08 do
   @moduledoc "Day Eight of the AoC"
   alias Day08.State
 
-  # All valid instructions
-  [:nop, :acc, :jmp]
+  @type instruction :: {:nop | :acc | :jmp, integer()}
 
+  @spec parse_instr(binary) :: instruction()
   def parse_instr(line) do
     [instr, data] = String.split(line)
     {String.to_existing_atom(instr), String.to_integer(data)}
   end
 
+  @spec parse(binary) :: [instruction()]
   def parse(file) do
     File.read!(file)
     |> String.split("\n", trim: true)
     |> Enum.map(&parse_instr/1)
   end
 
+  @spec run_instr(%State{}, instruction()) :: %State{} | {integer(), :exit}
   def run_instr(%{acc: a, pc: pc, vis: v} = s, {:acc, n}),
     do: %{s | pc: pc + 1, vis: [pc | v], acc: a + n}
 
@@ -28,13 +30,14 @@ defmodule Day08 do
   def run_instr(%{pc: pc, vis: v} = s, {:jmp, n}), do: %{s | pc: pc + n, vis: [pc | v]}
   def run_instr(%{acc: a}, _), do: {a, :exit}
 
+  @spec execute(%State{}) :: {integer(), :exit | :loop}
   def execute(%{acc: a, code: c, pc: l, vis: v} = s) do
     if l in v do
       {a, :loop}
     else
       case run_instr(s, Enum.at(c, l)) do
         {a, :exit} -> {a, :exit}
-        x -> execute(Map.merge(s, x))
+        x -> execute(x)
       end
     end
   end
@@ -44,11 +47,6 @@ defmodule Day08 do
     state = %State{code: code}
     {a, _} = execute(state)
     a
-  end
-
-  def part2(file \\ "./inputs/day8.txt") do
-    code = parse(file)
-    mutate(code, 0)
   end
 
   defp run_mut(mutated, code, line) do
@@ -71,5 +69,10 @@ defmodule Day08 do
       _ ->
         mutate(code, line + 1)
     end
+  end
+
+  def part2(file \\ "./inputs/day8.txt") do
+    code = parse(file)
+    mutate(code, 0)
   end
 end
