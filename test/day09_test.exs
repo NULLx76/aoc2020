@@ -1,5 +1,5 @@
 defmodule Day09Test do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   import Day09
 
   test "part1" do
@@ -7,6 +7,7 @@ defmodule Day09Test do
   end
 
   test "part2" do
-    assert part2() == 55_732_936
+    assert part2(true) == 55_732_936
+    assert part2(false) == 55_732_936
   end
 end
