@@ -24,12 +24,12 @@ defmodule Day03 do
     end
   end
 
-  def part1(file \\ "./inputs/day3.txt") do
+  def part1(file \\ "./inputs/day03.txt") do
     parse(file)
     |> slope({3, 1})
   end
 
-  def part2(file \\ "./inputs/day3.txt") do
+  def part2(file \\ "./inputs/day03.txt") do
     input = parse(file)
 
     [{1, 1}, {3, 1}, {5, 1}, {7, 1}, {1, 2}]

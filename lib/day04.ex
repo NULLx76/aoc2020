@@ -47,12 +47,12 @@ defmodule Day04 do
     |> Enum.map(&parse_passport/1)
   end
 
-  def part1(file \\ "./inputs/day4.txt") do
+  def part1(file \\ "./inputs/day04.txt") do
     parse(file)
     |> Enum.count(&has_valid_keys?/1)
   end
 
-  def part2(file \\ "./inputs/day4.txt") do
+  def part2(file \\ "./inputs/day04.txt") do
     parse(file)
     |> Enum.filter(&has_valid_keys?/1)
     |> Enum.count(&Enum.all?(&1, fn x -> valid?(x) end))

@@ -64,14 +64,14 @@ defmodule Day08 do
   alias Day08.Bootloader
 
   @spec part1(binary) :: integer
-  def part1(file \\ "./inputs/day8.txt") do
+  def part1(file \\ "./inputs/day08.txt") do
     code = Bootloader.parse(file)
     {acc, :loop} = Bootloader.run(code)
     acc
   end
 
   @spec part2(binary) :: integer
-  def part2(file \\ "./inputs/day8.txt") do
+  def part2(file \\ "./inputs/day08.txt") do
     code = Bootloader.parse(file)
     Bootloader.run_mutate(code)
   end

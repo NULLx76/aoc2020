@@ -18,13 +18,13 @@ defmodule Day06 do
     |> Enum.map(&String.split/1)
   end
 
-  def part1(file \\ "./inputs/day6.txt") do
+  def part1(file \\ "./inputs/day06.txt") do
     parse(file)
     |> Enum.map(&count_answers(&1, :anyone))
     |> Enum.sum()
   end
 
-  def part2(file \\ "./inputs/day6.txt") do
+  def part2(file \\ "./inputs/day06.txt") do
     parse(file)
     |> Enum.map(&count_answers(&1, :everyone))
     |> Enum.sum()

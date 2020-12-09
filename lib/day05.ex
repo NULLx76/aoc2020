@@ -26,7 +26,7 @@ defmodule Day05 do
 
   def seat_id({row, col}), do: row * 8 + col
 
-  def part1(file \\ "./inputs/day5.txt") do
+  def part1(file \\ "./inputs/day05.txt") do
     File.stream!(file)
     |> Stream.map(&String.trim/1)
     |> Stream.map(&decode(&1, @rowrange, @colrange))
@@ -34,7 +34,7 @@ defmodule Day05 do
     |> Enum.max()
   end
 
-  def part2(file \\ "./inputs/day5.txt") do
+  def part2(file \\ "./inputs/day05.txt") do
     [a | _] =
       File.read!(file)
       |> String.split("\n", trim: true)

@@ -37,13 +37,13 @@ defmodule Day07 do
   end
 
   @spec part1(binary) :: integer
-  def part1(file \\ "./inputs/day7.txt") do
+  def part1(file \\ "./inputs/day07.txt") do
     data = parse(file)
     Enum.count(data, &can_contain?(data, &1, @shiny_gold)) - 1
   end
 
   @spec part2(binary) :: integer
-  def part2(file \\ "./inputs/day7.txt") do
+  def part2(file \\ "./inputs/day07.txt") do
     data = parse(file)
     count_nested(data, @shiny_gold) - 1
   end

@@ -14,7 +14,7 @@ defmodule Day02 do
     count >= String.to_integer(min) && count <= String.to_integer(max)
   end
 
-  def part1(file \\ "./inputs/day2.txt") do
+  def part1(file \\ "./inputs/day02.txt") do
     parse(file)
     |> Enum.count(&is_valid?/1)
   end
@@ -27,7 +27,7 @@ defmodule Day02 do
     at_pos1? != at_pos2?
   end
 
-  def part2(file \\ "./inputs/day2.txt") do
+  def part2(file \\ "./inputs/day02.txt") do
     parse(file)
     |> Enum.count(&is_valid2?/1)
   end
