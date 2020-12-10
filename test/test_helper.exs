@@ -14,8 +14,8 @@ defmodule TestHelper do
       f.()
     end
 
-    exec_time = Float.round(Time.diff(Time.utc_now(), time, :millisecond) / n, 2)
-    IO.puts("\n#{name} takes #{exec_time}ms to execute")
+    exec_time = Float.round(Time.diff(Time.utc_now(), time, :microsecond) / n, 2)
+    IO.puts("\n#{name} takes #{exec_time}us to execute")
     exec_time
   end
 end
