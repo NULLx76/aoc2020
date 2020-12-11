@@ -7,7 +7,7 @@ defmodule TestHelper do
       Some name takes 0.07ms to execute
       0.07
   """
-  def time(name, f, n \\ 128) do
+  def time(name, f, n \\ 2048) do
     time = Time.utc_now()
 
     for _ <- 0..n do
