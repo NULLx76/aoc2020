@@ -1,9 +1,21 @@
 defmodule Day12 do
   @moduledoc "Day twelve of the AoC"
 
+  # Had problems with elixir optimizing away certain atoms
+  # So just make a map
+  @lookup %{
+    "N" => :N,
+    "E" => :E,
+    "S" => :S,
+    "W" => :W,
+    "F" => :F,
+    "L" => :L,
+    "R" => :R
+  }
+
   defp parse_instr(instr) do
     {op, n} = String.split_at(instr, 1)
-    {String.to_existing_atom(op), String.to_integer(n)}
+    {Map.get(@lookup, op), String.to_integer(n)}
   end
 
   defp parse(file) do

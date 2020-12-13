@@ -7,6 +7,6 @@ defmodule Day12Test do
   end
 
   test "part2" do
-    assert part2() == 63843
+    assert part2() == 63_843
   end
 end
