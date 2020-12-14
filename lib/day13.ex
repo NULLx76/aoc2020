@@ -18,19 +18,14 @@ defmodule Day13 do
   end
 
   def find_next_bus(time, bus) do
-    c = Enum.find(bus, fn x -> rem(time, x) == 0 end)
-
-    if c == nil do
-      find_next_bus(time + 1, bus)
-    else
-      {time, c}
-    end
+    id = Enum.min_by(bus, &(&1 - rem(time, &1)))
+    wait = id - rem(time, id)
+    id * wait
   end
 
   def part1(file \\ "./inputs/day13.txt") do
     [time | bus] = parse(file)
-    {dep, next} = find_next_bus(time, bus)
-    (dep - time) * next
+    find_next_bus(time, bus)
   end
 
   def part2(file \\ "./inputs/day13.txt") do
