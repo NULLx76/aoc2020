@@ -1,24 +1,16 @@
 defmodule Day16 do
   @moduledoc "Day Sixteen of the AoC"
 
-  def parse_range(str) do
-    [l | [r]] =
-      str
-      |> String.split("-")
-      |> Enum.map(&String.to_integer/1)
-
-    l..r
-  end
-
   def parse_rule(str) do
     str
     |> String.split([": ", " or "])
     |> Enum.slice(1..-1)
-    |> Enum.map(&parse_range/1)
+    |> Enum.map(&String.split(&1, "-"))
+    |> Enum.map(fn [l | [r]] -> String.to_integer(l)..String.to_integer(r) end)
   end
 
   def parse(file) do
-    [raw_rules | [raw_ticket | [raw_nearby]]] =
+    [raw_rules | [[raw_ticket] | [raw_nearby]]] =
       file
       |> String.split(["your ticket:", "nearby tickets:"], trim: true)
       |> Enum.map(&String.split(&1, "\n", trim: true))
@@ -27,7 +19,6 @@ defmodule Day16 do
 
     ticket =
       raw_ticket
-      |> hd()
       |> String.split(",")
       |> Enum.map(&String.to_integer/1)
 
@@ -46,13 +37,11 @@ defmodule Day16 do
     |> Enum.map(&parse_rule/1)
   end
 
-  def is_valid_field?(digit, rules), do: Enum.any?(rules, fn rule -> digit in rule end)
+  def is_valid_field?(digit, rules), do: Enum.any?(rules, &(digit in &1))
 
   def is_valid?(ticket, rules) do
     rules = rules |> List.flatten()
-
-    ticket
-    |> Enum.all?(&is_valid_field?(&1, rules))
+    Enum.all?(ticket, &is_valid_field?(&1, rules))
   end
 
   def ticket_errors(ticket, rules) do
@@ -63,39 +52,36 @@ defmodule Day16 do
     |> Enum.sum()
   end
 
-  def is_valid_for_all(tickets, pos, rule) do
+  def is_valid_for_all?(tickets, pos, rule) do
     tickets
     |> Enum.map(&Enum.at(&1, pos))
     |> Enum.all?(&is_valid_field?(&1, rule))
-  end
-
-  def identify_field(valid_tickets, rules) do
-    combos =
-      for i <- 0..length(rules),
-          r <- rules,
-          is_valid_for_all(valid_tickets, i, r),
-          do: {i, r}
-
-    Enum.chunk_by(combos, fn {pos, _} -> pos end)
   end
 
   def remove_rule(combos, rule) do
     combos
     |> Enum.map(&Enum.reject(&1, fn {_, r} -> r == rule end))
     |> Enum.reject(&(&1 == []))
+    |> Enum.sort(&(length(&1) < length(&2)))
   end
 
-  def reduce_combos(combos, found \\ %{}) do
-    combos = Enum.sort(combos, fn a, b -> length(a) < length(b) end)
+  def reduce_combos(combos), do: reduce_combos(combos, %{})
+  def reduce_combos(combos, found) when length(combos) == 1, do: found
 
+  def reduce_combos(combos, found) do
     {i, r} = hd(hd(combos))
-
     found = Map.put(found, r, i)
 
-    case remove_rule(combos, r) do
-      [] -> found
-      x -> reduce_combos(x, found)
+    remove_rule(combos, r)
+    |> reduce_combos(found)
+  end
+
+  def identify_field(valid_tickets, rules) do
+    for i <- 0..length(rules), r <- rules, is_valid_for_all?(valid_tickets, i, r) do
+      {i, r}
     end
+    |> Enum.chunk_by(fn {pos, _} -> pos end)
+    |> reduce_combos()
   end
 
   def part1(file \\ "./inputs/day16.txt") do
@@ -115,7 +101,6 @@ defmodule Day16 do
     nearby
     |> Enum.filter(&is_valid?(&1, rules))
     |> identify_field(rules)
-    |> reduce_combos()
     |> Enum.filter(fn {k, _} -> k in dep_range end)
     |> Enum.reduce(1, fn {_, i}, acc -> acc * Enum.at(ticket, i) end)
   end
