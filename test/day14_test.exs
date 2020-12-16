@@ -3,6 +3,6 @@ defmodule Day14Test do
   import Day14
 
   test "part2" do
-    assert part2() == 4463708436768
+    assert part2() == 4_463_708_436_768
   end
 end
