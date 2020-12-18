@@ -27,7 +27,6 @@ defmodule Day08.Bootloader do
   def exec(s, {:jmp, n}), do: %State{s | pc: s.pc + n, vis: [s.pc | s.vis]}
   def exec(s, {:acc, n}), do: %State{s | pc: s.pc + 1, vis: [s.pc | s.vis], acc: s.acc + n}
 
-  @spec run(code() | %State{}) :: {integer(), :exit | :loop}
   def run(code) when is_list(code), do: run(%State{code: code})
 
   def run(s) do
