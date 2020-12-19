@@ -17,3 +17,7 @@ indent_style = space
 
 [*.md]
 trim_trailing_whitespace = false
+
+[*.rs, *.py]
+indent_size = 4
+indent_style = space

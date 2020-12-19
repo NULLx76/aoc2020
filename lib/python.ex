@@ -19,14 +19,10 @@ defmodule Python do
       path = [:code.priv_dir(:aoc2020), "python"] |> Path.join()
       python_instance(to_charlist(path))
     end
-
-    def call_python_default(module, function, arguments \\ []) do
-      default_instance()
-      |> call_python(module, function, arguments)
-    end
   end
 
   def day19_part2(input) do
-    Helper.call_python_default(:day19, :part2, [input])
+    Helper.default_instance()
+    |> Helper.call_python(:day19, :part2, [input])
   end
 end
