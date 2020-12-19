@@ -8,6 +8,8 @@ defmodule AoC2020.MixProject do
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      compilers: [:rustler] ++ Mix.compilers(),
+      rustler_crates: [aoc2020rs: []],
       dialyzer: [
         plt_add_apps: [:mix],
         flags: [:unmatched_returns, :error_handling, :race_conditions, :underspecs]
@@ -18,7 +20,7 @@ defmodule AoC2020.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger, :eex]
     ]
   end
 
@@ -29,7 +31,9 @@ defmodule AoC2020.MixProject do
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:benchee, "~> 1.0", only: [:dev, :test]},
       {:combination, "~> 0.0.3"},
-      {:memoizer, "~> 0.1.0"}
+      {:rustler, "~> 0.21.1"},
+      {:toml, "~> 0.5.2"},
+      {:erlport, "~> 0.9"}
     ]
   end
 end
