@@ -20,7 +20,7 @@ defmodule AoC2020.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :eex]
+      extra_applications: [:logger]
     ]
   end
 
@@ -32,7 +32,6 @@ defmodule AoC2020.MixProject do
       {:benchee, "~> 1.0", only: [:dev, :test]},
       {:combination, "~> 0.0.3"},
       {:rustler, "~> 0.21.1"},
-      {:toml, "~> 0.5.2"},
       {:erlport, "~> 0.9"}
     ]
   end
