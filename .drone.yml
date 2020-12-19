@@ -5,13 +5,9 @@ name: default
 
 steps:
 - name: Elixir Build and Test
-  image: harbor.xirion.net/hub/library/elixir
+  image: harbor.xirion.net/library/aoc2020
   commands:
-    - apt-get update -y
-    - apt-get install cargo python-pip -y
     - pip install lark-parser --upgrade
-    - mix local.hex --force
-    - mix local.rebar --force
-    - mix deps.get
+    - yes | mix deps.get
     - mix test
     - mix credo
