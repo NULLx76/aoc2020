@@ -13,14 +13,12 @@ def parse(input):
 
   grammar = re.sub(r"(\d+)", r"d\1", grammar)
 
-  grammar += "\nstart: d0"
-
   return [grammar, messages]
 
 def part2(input):
   [grammar, messages] = parse(input)
 
-  parser = Lark(grammar, parser="earley")
+  parser = Lark(grammar, parser="earley", start="d0")
 
   total = 0
   for line in messages.splitlines():
