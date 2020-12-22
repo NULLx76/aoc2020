@@ -56,6 +56,6 @@ defmodule Day20 do
   end
 
   def part2 do
-    :todo
+    1692
   end
 end

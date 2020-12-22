@@ -7,7 +7,7 @@ defmodule Day20Test do
     assert part1() == 54_755_174_472_007
   end
 
-  # test "part2" do
-  #   assert part2() == 363
-  # end
+  test "part2" do
+    assert part2() == 1692
+  end
 end
