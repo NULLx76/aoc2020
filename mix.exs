@@ -29,7 +29,7 @@ defmodule AoC2020.MixProject do
     [
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
-      {:benchwarmer, "~> 0.0.2"},
+      {:fastglobal, "~> 1.0"},
       {:combination, "~> 0.0.3"},
       {:rustler, "~> 0.21.1"},
       {:erlport, "~> 0.9"}

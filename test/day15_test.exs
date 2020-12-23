@@ -7,7 +7,6 @@ defmodule Day15Test do
     assert part1() == 614
   end
 
-  @tag :skip
   test "part2" do
     assert part2() == 1065
   end

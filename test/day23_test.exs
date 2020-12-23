@@ -7,7 +7,7 @@ defmodule Day23Test do
     assert part1() == 94_238_657
   end
 
-  # @tag :skip
+  @tag timeout: 120_000
   test "part2" do
     assert part2() == 3_072_905_352
   end
