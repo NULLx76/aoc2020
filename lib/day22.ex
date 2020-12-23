@@ -11,20 +11,14 @@ defmodule Day22 do
 
   def play({[], p2}), do: p2
   def play({p1, []}), do: p1
-
-  def play({[p1 | p1_tail], [p2 | p2_tail]}) do
-    if p1 > p2 do
-      play({p1_tail ++ [p1, p2], p2_tail})
-    else
-      play({p1_tail, p2_tail ++ [p2, p1]})
-    end
-  end
+  def play({[p1 | p1_tail], [p2 | p2_tail]}) when p1 > p2, do: play({p1_tail ++ [p1, p2], p2_tail})
+  def play({[p1 | p1_tail], [p2 | p2_tail]}), do: play({p1_tail, p2_tail ++ [p2, p1]})
 
   def score(list) do
     list
     |> Enum.reverse()
-    |> Enum.with_index()
-    |> Enum.map(fn {v, i} -> v * (i + 1) end)
+    |> Enum.with_index(1)
+    |> Enum.map(fn {v, i} -> v * i end)
     |> Enum.sum()
   end
 
