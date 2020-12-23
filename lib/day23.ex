@@ -52,13 +52,11 @@ defmodule Day23 do
     @moves 10_000_000
 
     def create_tab(original_list, rest_start..rest_end) do
-      table = :ets.new(:cups, [:set])
-
       start =
         original_list
         |> List.insert_at(-1, rest_start)
-        |> Enum.chunk_every(2, 1, :discard)
-        |> Enum.map(&List.to_tuple/1)
+        |> Stream.chunk_every(2, 1, :discard)
+        |> Stream.map(&List.to_tuple/1)
 
       # Generate it for the next n
       middle =
@@ -69,20 +67,20 @@ defmodule Day23 do
       last = [{rest_end, List.first(original_list)}]
 
       # Concat and insert
-      items = [start, middle, last] |> Enum.concat()
-      :ets.insert(table, items)
+      table = :ets.new(:cups, [:set])
+      :ets.insert(table, Enum.concat([start, middle, last]))
 
       table
     end
 
     def move({curr, tab}) do
-      [{^curr, a}] = :ets.lookup(tab, curr)
-      [{^a, b}] = :ets.lookup(tab, a)
-      [{^b, c}] = :ets.lookup(tab, b)
-      [{^c, next}]  = :ets.lookup(tab, c)
+      a = :ets.lookup_element(tab, curr, 2)
+      b = :ets.lookup_element(tab, a, 2)
+      c = :ets.lookup_element(tab, b, 2)
+      next = :ets.lookup_element(tab, c, 2)
 
       dest = Day23.find_destination(curr, a, b, c, @max)
-      [{^dest, after_destination}] = :ets.lookup(tab, dest)
+      after_destination = :ets.lookup_element(tab, dest, 2)
 
       :ets.insert(tab, {curr, next})
       :ets.insert(tab, {dest, a})
@@ -94,12 +92,14 @@ defmodule Day23 do
     def run(data) do
       tab = create_tab(data, 10..@max)
 
-      {List.first(data), tab}
-      |> Stream.iterate(&move/1)
-      |> Enum.at(@moves)
+      res =
+        {List.first(data), tab}
+        |> Stream.iterate(&move/1)
+        |> Enum.at(@moves)
+        |> elem(1)
 
-      [{1, s1}] = :ets.lookup(tab,1)
-      [{^s1, s2}] = :ets.lookup(tab, s1)
+      s1 = :ets.lookup_element(res, 1, 2)
+      s2 = :ets.lookup_element(res, s1, 2)
 
       s1 * s2
     end
